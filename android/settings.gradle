@@ -1,0 +1,3 @@
+rootProject.name = 'puzzle15app'
+
+include ':app'
