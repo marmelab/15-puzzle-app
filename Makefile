@@ -1,4 +1,4 @@
-.PHONY: help install run start test
+.PHONY: help install run start test lint
 
 help: ## Print all commands (default)
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -20,3 +20,6 @@ start: ## Run the 15-puzzle app (alias for `run`)
 
 test: ## Run all tests
 	node_modules/.bin/jest
+
+lint: ## Run the linter
+	node_modules/.bin/eslint src/
