@@ -1,10 +1,10 @@
 import 'react-native';
 import React from 'react';
-import App from '../src/App';
+import Tile from '../src/components/Tile';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 
-it('should render App correctly', () => {
-    renderer.create(<App />);
+it('should render Tile correctly', () => {
+    renderer.create(<Tile />);
 });
