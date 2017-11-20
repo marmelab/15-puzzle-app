@@ -5,7 +5,10 @@ help: ## Print all commands (default)
 
 ####### BUILD #######
 
-install: ## Install the requirements
+copy-config: ## Create the config file based on the config example
+	cp -n ./src/config.dist.js ./src/config.js
+
+install: copy-config ## Install dependencies
 	npm i
 
 ####### RUN #######
