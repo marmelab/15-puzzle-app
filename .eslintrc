@@ -12,6 +12,9 @@
     "node": true,
     "jest": true
   },
+  "globals": {
+    "fetch": true
+  },
   "extends": [
     "eslint:recommended",
     "plugin:import/errors",
