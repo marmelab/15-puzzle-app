@@ -16,22 +16,18 @@ export default class HomeScreen extends Component {
 
     constructor(props) {
         super(props);
-
-        this.requestNewGame = this.requestNewGame.bind(this);
-        this.requestNewSingleGame = this.requestNewSingleGame.bind(this);
     }
 
-    requestNewGame(mode) {
-        newGame()(mode).then(res => {
-            this.props.navigation.navigate('Game', {
-                game: res,
-            });
+    requestNewGame = async mode => {
+        const res = await newGame()(mode);
+        this.props.navigation.navigate('Game', {
+            game: res,
         });
-    }
+    };
 
-    requestNewSingleGame() {
+    requestNewSingleGame = () => {
         this.requestNewGame('single');
-    }
+    };
 
     render() {
         const bannerImg = require('../ressources/images/banner.jpg');

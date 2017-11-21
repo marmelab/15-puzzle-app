@@ -25,41 +25,36 @@ export default class GameScreen extends Component {
             turn: -1,
             isWinner: null,
         };
-
-        this.requestGame = this.requestGame.bind(this);
-        this.requestMove = this.requestMove.bind(this);
     }
 
-    requestGame() {
+    requestGame = async () => {
         let id = this.props.navigation.state.params.game.id;
         let token = this.props.navigation.state.params.game.token;
 
-        game()(id, token).then(res => {
-            this.setState({
-                isLoading: false,
-                id,
-                token,
-                currentGrid: res.currentPlayer.currentGrid,
-                turn: res.currentPlayer.turn,
-                isWinner: res.winner !== null,
-            });
+        const res = await game()(id, token);
+        this.setState({
+            isLoading: false,
+            id,
+            token,
+            currentGrid: res.currentPlayer.currentGrid,
+            turn: res.currentPlayer.turn,
+            isWinner: res.winner !== null,
         });
-    }
+    };
 
-    requestMove(tile) {
+    requestMove = async tile => {
         let id = this.state.game.id;
         let token = this.state.token;
 
-        move()(id, token, tile).then(res => {
-            this.setState({
-                id,
-                token,
-                currentGrid: res.player.currentGrid,
-                turn: res.player.turn,
-                isWinner: res.game.winner !== null,
-            });
+        const res = await move()(id, token, tile);
+        this.setState({
+            id,
+            token,
+            currentGrid: res.player.currentGrid,
+            turn: res.player.turn,
+            isWinner: res.game.winner !== null,
         });
-    }
+    };
 
     componentWillMount() {
         this.requestGame();
