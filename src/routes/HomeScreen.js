@@ -14,12 +14,23 @@ export default class HomeScreen extends Component {
         navigation: PropTypes.object.isRequired,
     };
 
-    requestNewGame(event, mode) {
+    constructor(props) {
+        super(props);
+
+        this.requestNewGame = this.requestNewGame.bind(this);
+        this.requestNewSingleGame = this.requestNewSingleGame.bind(this);
+    }
+
+    requestNewGame(mode) {
         newGame()(mode).then(res => {
             this.props.navigation.navigate('Game', {
                 game: res,
             });
         });
+    }
+
+    requestNewSingleGame() {
+        this.requestNewGame('single');
     }
 
     render() {
@@ -33,7 +44,7 @@ export default class HomeScreen extends Component {
                 <Image source={bannerImg} style={styles.banner} />
                 <Button
                     style={styles.actions}
-                    onPress={event => this.requestNewGame(event, 'single')}
+                    onPress={this.requestNewSingleGame}
                     title="Start a new game"
                 />
             </View>
