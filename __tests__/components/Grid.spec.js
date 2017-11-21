@@ -1,10 +1,10 @@
 import 'react-native';
-import App from '../src/App';
 import React from 'react';
+import Grid from '../../src/components/Grid';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 
-it('should render App correctly', () => {
-    renderer.create(<App />);
+it('should render Grid correctly', () => {
+    renderer.create(<Grid onPress={() => {}} grid={[]} />);
 });

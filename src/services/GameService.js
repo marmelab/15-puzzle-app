@@ -34,7 +34,7 @@ export const game = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
     }).then(res => res.json());
 };
 
-export const move = (baseUrl = DEFAULT_BASE_URL) => (id, tile, token) => {
+export const move = (baseUrl = DEFAULT_BASE_URL) => (id, token, tile) => {
     const url = `${baseUrl}/game/${id}/move/${tile}`;
     const method = 'PUT';
     const headers = Object.assign({}, DEFAULT_HEADER_JSON, {
