@@ -17,25 +17,62 @@ export default class GameScreen extends Component {
         super(props);
 
         this.state = {
-            game: this.props.navigation.state.params.game,
-            canPlay: true,
+            isLoading: true,
+            id: -1,
+            token: '',
+            currentGrid: null,
+            turn: -1,
+            isWinner: null,
         };
+
+        this.requestGame = this.requestGame.bind(this);
+        this.requestMove = this.requestMove.bind(this);
     }
 
     requestGame() {
-        game()().then();
+        let id = this.props.navigation.state.params.game.id;
+        let token = this.props.navigation.state.params.game.token;
+
+        game()(id, token).then(res => {
+            this.setState({
+                isLoading: false,
+                id,
+                token,
+                currentGrid: res.currentPlayer.currentGrid,
+                turn: res.currentPlayer.turn,
+                isWinner: res.winner !== null,
+            });
+        });
     }
 
-    requestMove() {
-        move()().then();
+    requestMove(tile) {
+        let id = this.state.game.id;
+        let token = this.state.token;
+
+        move()(id, token, tile).then(res => {
+            this.setState({
+                id,
+                token,
+                currentGrid: res.player.currentGrid,
+                turn: res.player.turn,
+                isWinner: res.game.winner !== null,
+            });
+        });
+    }
+
+    componentWillMount() {
+        this.requestGame();
     }
 
     render() {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Turn</Text>
-            </View>
-        );
+        let content = null;
+        if (this.state.isLoading) {
+            content = <Text>Loading...</Text>;
+        } else {
+            content = <Text style={styles.title}>Turn {this.state.turn}</Text>;
+        }
+
+        return <View style={styles.container}>{content}</View>;
     }
 }
 
