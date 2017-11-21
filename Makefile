@@ -23,3 +23,6 @@ test: ## Run all tests
 
 lint: ## Run the linter
 	node_modules/.bin/eslint src/
+
+format: ## Format the source code
+	node_modules/.bin/eslint --fix src/*
