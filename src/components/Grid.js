@@ -16,9 +16,11 @@ export default class Grid extends Component {
     };
 
     render() {
+        const { grid, readOnly, onPress } = this.props;
+
         return (
             <View style={styles.column}>
-                {this.props.grid.map((row, rowKey) => {
+                {grid.map((row, rowKey) => {
                     return (
                         <View style={styles.row} key={rowKey}>
                             {row.map((tileValue, tileKey) => {
@@ -29,8 +31,8 @@ export default class Grid extends Component {
                                     <Tile
                                         key={tileKey}
                                         tileValue={tileValue}
-                                        enabled={!this.props.readOnly}
-                                        onPress={this.props.onPress}
+                                        enabled={!readOnly}
+                                        onPress={onPress}
                                     />
                                 );
                             })}

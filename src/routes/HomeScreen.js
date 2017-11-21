@@ -14,10 +14,6 @@ export default class HomeScreen extends Component {
         navigation: PropTypes.object.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-    }
-
     requestNewGame = async mode => {
         const res = await newGame()(mode);
         this.props.navigation.navigate('Game', {

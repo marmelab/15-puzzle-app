@@ -21,15 +21,15 @@ export default class Tile extends Component {
     };
 
     render() {
+        const { tileValue } = this.props;
+
         return (
             <TouchableHighlight
                 style={styles.tile}
                 onPress={this.move}
                 underlayColor="#f44336"
             >
-                <Text style={styles.value}>
-                    {this.props.tileValue.toString()}
-                </Text>
+                <Text style={styles.value}>{tileValue}</Text>
             </TouchableHighlight>
         );
     }

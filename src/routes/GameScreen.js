@@ -15,18 +15,14 @@ export default class GameScreen extends Component {
         navigation: PropTypes.object.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isLoading: true,
-            id: -1,
-            token: '',
-            currentGrid: null,
-            turn: -1,
-            isWinner: null,
-        };
-    }
+    state = {
+        isLoading: true,
+        id: -1,
+        token: '',
+        currentGrid: null,
+        turn: -1,
+        isWinner: null,
+    };
 
     requestGame = async () => {
         let id = this.props.navigation.state.params.game.id;
@@ -44,7 +40,6 @@ export default class GameScreen extends Component {
     };
 
     requestMove = async tile => {
-        console.log('tile', tile);
         let id = this.state.game.id;
         let token = this.state.token;
 
@@ -63,11 +58,12 @@ export default class GameScreen extends Component {
     }
 
     render() {
+        const { currentGrid, turn, isLoading } = this.state;
         if (this.state.isLoading) {
             return (
                 <View style={styles.container}>
                     <ActivityIndicator
-                        animating={this.state.isLoading}
+                        animating={isLoading}
                         style={styles.loader}
                         size="large"
                     />
@@ -76,11 +72,8 @@ export default class GameScreen extends Component {
         }
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Turn {this.state.turn}</Text>
-                <Grid
-                    onPress={this.requestMove}
-                    grid={this.state.currentGrid}
-                />
+                <Text style={styles.title}>Turn {turn}</Text>
+                <Grid onPress={this.requestMove} grid={currentGrid} />
             </View>
         );
     }
