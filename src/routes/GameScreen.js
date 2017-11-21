@@ -28,28 +28,28 @@ export default class GameScreen extends Component {
         let id = this.props.navigation.state.params.game.id;
         let token = this.props.navigation.state.params.game.token;
 
-        const res = await game()(id, token);
+        const { player, game } = await game()(id, token);
         this.setState({
             isLoading: false,
             id,
             token,
-            currentGrid: res.currentPlayer.currentGrid,
-            turn: res.currentPlayer.turn,
-            isWinner: res.winner !== null,
+            currentGrid: player.currentGrid,
+            turn: player.turn,
+            isWinner: game.winner !== null,
         });
     };
 
     requestMove = async tile => {
-        let id = this.state.game.id;
-        let token = this.state.token;
+        const { id } = this.state.game;
+        const { token } = this.state;
 
-        const res = await move()(id, token, tile);
+        const { player, game } = await move()(id, token, tile);
         this.setState({
             id,
             token,
-            currentGrid: res.player.currentGrid,
-            turn: res.player.turn,
-            isWinner: res.game.winner !== null,
+            currentGrid: player.currentGrid,
+            turn: player.turn,
+            isWinner: game.winner !== null,
         });
     };
 
@@ -59,7 +59,8 @@ export default class GameScreen extends Component {
 
     render() {
         const { currentGrid, turn, isLoading } = this.state;
-        if (this.state.isLoading) {
+
+        if (isLoading) {
             return (
                 <View style={styles.container}>
                     <ActivityIndicator

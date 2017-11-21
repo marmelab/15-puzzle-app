@@ -15,8 +15,9 @@ export default class Tile extends Component {
     };
 
     move = () => {
-        if (this.props.enabled) {
-            this.props.onPress(this.props.tileValue);
+        const { enabled, tileValue, onPress } = this.props;
+        if (enabled) {
+            onPress(tileValue);
         }
     };
 
