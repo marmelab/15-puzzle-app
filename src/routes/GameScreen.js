@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-primitives';
+import { ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { game, move } from '../services/GameService';
@@ -67,7 +68,13 @@ export default class GameScreen extends Component {
     render() {
         let content = null;
         if (this.state.isLoading) {
-            content = <Text>Loading...</Text>;
+            content = (
+                <ActivityIndicator
+                    animating={this.state.isLoading}
+                    style={styles.loader}
+                    size="large"
+                />
+            );
         } else {
             content = <Text style={styles.title}>Turn {this.state.turn}</Text>;
         }
@@ -82,6 +89,12 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+    },
+    loader: {
+        alignItems: 'center',
+        height: 80,
+        justifyContent: 'center',
+        padding: 8,
     },
     title: {
         fontSize: 20,
