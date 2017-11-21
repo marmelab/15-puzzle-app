@@ -21,14 +21,19 @@ export default class Grid extends Component {
                 {this.props.grid.map((row, rowKey) => {
                     return (
                         <View style={styles.row} key={rowKey}>
-                            {row.map((tileValue, tileKey) => (
-                                <Tile
-                                    key={tileKey}
-                                    tileValue={tileValue}
-                                    enabled={!this.props.readOnly}
-                                    onPress={this.props.onPress}
-                                />
-                            ))}
+                            {row.map((tileValue, tileKey) => {
+                                if (tileValue === 0) {
+                                    return;
+                                }
+                                return (
+                                    <Tile
+                                        key={tileKey}
+                                        tileValue={tileValue}
+                                        enabled={!this.props.readOnly}
+                                        onPress={this.props.onPress}
+                                    />
+                                );
+                            })}
                         </View>
                     );
                 })}
