@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text } from 'react-primitives';
+import { TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class Tile extends Component {
@@ -13,38 +14,40 @@ export default class Tile extends Component {
         enabled: true,
     };
 
-    move() {
+    move = () => {
         if (this.props.enabled) {
             this.props.onPress(this.props.tileValue);
         }
-    }
+    };
 
     render() {
         return (
-            <Text style={styles.tile} onPress={this.move}>
-                <Text style={styles.value}>{this.props.tileValue}</Text>
-            </Text>
+            <TouchableHighlight
+                style={styles.tile}
+                onPress={this.move}
+                underlayColor="#f44336"
+            >
+                <Text style={styles.value}>
+                    {this.props.tileValue.toString()}
+                </Text>
+            </TouchableHighlight>
         );
     }
 }
 
 const styles = StyleSheet.create({
     tile: {
-        alignIitems: 'center',
-        display: 'flex',
-        fontSize: '28',
-        height: '150',
-        justifyContent: 'center',
-        margin: '3',
-        width: '150',
-    },
-    value: {
         alignItems: 'center',
         backgroundColor: '#d32f2f',
-        color: 'white',
         display: 'flex',
-        height: '100%',
+        height: 50,
         justifyContent: 'center',
-        width: '100%',
+        margin: 5,
+        width: 50,
+    },
+    value: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center',
     },
 });

@@ -4,6 +4,7 @@ import { ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { game, move } from '../services/GameService';
+import Grid from '../components/Grid';
 
 export default class GameScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -43,6 +44,7 @@ export default class GameScreen extends Component {
     };
 
     requestMove = async tile => {
+        console.log('tile', tile);
         let id = this.state.game.id;
         let token = this.state.token;
 
@@ -61,29 +63,35 @@ export default class GameScreen extends Component {
     }
 
     render() {
-        let content = null;
         if (this.state.isLoading) {
-            content = (
-                <ActivityIndicator
-                    animating={this.state.isLoading}
-                    style={styles.loader}
-                    size="large"
-                />
+            return (
+                <View style={styles.container}>
+                    <ActivityIndicator
+                        animating={this.state.isLoading}
+                        style={styles.loader}
+                        size="large"
+                    />
+                </View>
             );
-        } else {
-            content = <Text style={styles.title}>Turn {this.state.turn}</Text>;
         }
-
-        return <View style={styles.container}>{content}</View>;
+        return (
+            <View style={styles.container}>
+                <Text style={styles.title}>Turn {this.state.turn}</Text>
+                <Grid
+                    onPress={this.requestMove}
+                    grid={this.state.currentGrid}
+                />
+            </View>
+        );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#F5FCFF',
+        alignItems: 'center',
         flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
     loader: {
         alignItems: 'center',

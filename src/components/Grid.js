@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text } from 'react-primitives';
+import { StyleSheet, View } from 'react-primitives';
 import PropTypes from 'prop-types';
 
 import Tile from './Tile';
@@ -16,22 +16,33 @@ export default class Grid extends Component {
     };
 
     render() {
-        return this.props.grid.forEach(row => {
-            <Text style={styles.row}>
-                {row.forEach(value => {
-                    <Tile
-                        tileValue={value}
-                        enabled={!this.props.readOnly}
-                        onPress={this.props.onPress}
-                    />;
+        return (
+            <View style={styles.column}>
+                {this.props.grid.map((row, rowKey) => {
+                    return (
+                        <View style={styles.row} key={rowKey}>
+                            {row.map((tileValue, tileKey) => (
+                                <Tile
+                                    key={tileKey}
+                                    tileValue={tileValue}
+                                    enabled={!this.props.readOnly}
+                                    onPress={this.props.onPress}
+                                />
+                            ))}
+                        </View>
+                    );
                 })}
-            </Text>;
-        });
+            </View>
+        );
     }
 }
 
 const styles = StyleSheet.create({
+    column: {
+        flexDirection: 'column',
+    },
     row: {
-        display: 'flex',
+        flexDirection: 'row',
+        margin: 3,
     },
 });
