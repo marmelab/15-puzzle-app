@@ -23,13 +23,13 @@ export default class Grid extends Component {
                 {grid.map((row, rowKey) => {
                     return (
                         <View style={styles.row} key={rowKey}>
-                            {row.map((tileValue, tileKey) => {
+                            {row.map(tileValue => {
                                 if (tileValue === 0) {
                                     return;
                                 }
                                 return (
                                     <Tile
-                                        key={tileKey}
+                                        key={tileValue}
                                         tileValue={tileValue}
                                         enabled={!readOnly}
                                         onPress={onPress}
