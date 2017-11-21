@@ -24,37 +24,35 @@ export default class GameScreen extends Component {
         isWinner: null,
     };
 
-    requestGame = async () => {
-        let id = this.props.navigation.state.params.game.id;
-        let token = this.props.navigation.state.params.game.token;
+    requestGame = async (id, token) => {
+        const { currentPlayer, winner } = await game()(id, token);
 
-        const { player, game } = await game()(id, token);
         this.setState({
             isLoading: false,
             id,
             token,
-            currentGrid: player.currentGrid,
-            turn: player.turn,
-            isWinner: game.winner !== null,
+            currentGrid: currentPlayer.currentGrid,
+            turn: currentPlayer.turn,
+            isWinner: winner !== null,
         });
     };
 
     requestMove = async tile => {
         const { id } = this.state.game;
         const { token } = this.state;
+        const { currentPlayer, winner } = await move()(id, token, tile);
 
-        const { player, game } = await move()(id, token, tile);
         this.setState({
-            id,
-            token,
-            currentGrid: player.currentGrid,
-            turn: player.turn,
-            isWinner: game.winner !== null,
+            currentGrid: currentPlayer.currentGrid,
+            turn: currentPlayer.turn,
+            isWinner: winner !== null,
         });
     };
 
     componentWillMount() {
-        this.requestGame();
+        let id = this.props.navigation.state.params.game.id;
+        let token = this.props.navigation.state.params.game.token;
+        this.requestGame(id, token);
     }
 
     render() {
@@ -74,7 +72,11 @@ export default class GameScreen extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Turn {turn}</Text>
-                <Grid onPress={this.requestMove} grid={currentGrid} />
+                <Grid
+                    onPress={this.requestMove}
+                    grid={currentGrid}
+                    readOnly={false}
+                />
             </View>
         );
     }
