@@ -46,3 +46,16 @@ export const move = (baseUrl = DEFAULT_BASE_URL) => (id, token, tile) => {
         headers,
     }).then(res => res.json());
 };
+
+export const cancel = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
+    const url = `${baseUrl}/game/${id}`;
+    const method = 'DELETE';
+    const headers = Object.assign({}, DEFAULT_HEADER_JSON, {
+        Authorization: `Bearer ${token}`,
+    });
+
+    return fetch(url, {
+        method,
+        headers,
+    }).then(res => res.json());
+};
