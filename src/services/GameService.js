@@ -75,6 +75,19 @@ export const cancel = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
         .then(res => res.json());
 };
 
+export const join = (baseUrl = DEFAULT_BASE_URL) => id => {
+    const url = `${baseUrl}/game/${id}/join`;
+    const method = 'POST';
+    const headers = Object.assign({}, DEFAULT_HEADER_JSON);
+
+    return fetch(url, {
+        method,
+        headers,
+    })
+        .then(handleErrors)
+        .then(res => res.json());
+};
+
 export const games = (baseUrl = DEFAULT_BASE_URL) => () => {
     const url = `${baseUrl}/games/open`;
     const method = 'GET';
