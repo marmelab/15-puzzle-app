@@ -21,7 +21,7 @@ export default class GameScreen extends Component {
         token: '',
         currentGrid: null,
         turn: -1,
-        isWinner: null,
+        isWinner: false,
     };
 
     requestGame = async (id, token) => {
@@ -53,7 +53,7 @@ export default class GameScreen extends Component {
     }
 
     render() {
-        const { currentGrid, turn, isLoading } = this.state;
+        const { currentGrid, turn, isWinner, isLoading } = this.state;
 
         if (isLoading) {
             return (
@@ -68,11 +68,17 @@ export default class GameScreen extends Component {
         }
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Turn {turn}</Text>
+                <Text style={styles.title}>
+                    {isWinner
+                        ? `Turn ${turn}`
+                        : `Congratulations, you have solved the puzzle in ${
+                              turn
+                          } turns!`}
+                </Text>
                 <Grid
                     onPress={this.requestMove}
                     grid={currentGrid}
-                    readOnly={false}
+                    readOnly={isWinner}
                 />
             </View>
         );
