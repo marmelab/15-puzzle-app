@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-primitives';
-import { ActivityIndicator, Button } from 'react-native';
+import { ActivityIndicator, Button, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { game, move, cancel } from '../services/GameService';
@@ -52,6 +52,13 @@ export default class GameScreen extends Component {
             isLoading: true,
         });
         await cancel()(id, token);
+        const { navigation } = this.props;
+        navigation.goBack();
+        ToastAndroid.showWithGravity(
+            'The game has been canceled with success',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+        );
     };
 
     componentWillMount() {
