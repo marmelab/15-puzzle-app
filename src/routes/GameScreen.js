@@ -25,40 +25,64 @@ export default class GameScreen extends Component {
     };
 
     requestGame = async (id, token) => {
-        const { currentPlayer, winner } = await game()(id, token);
-        this.setState({
-            isLoading: false,
-            id,
-            token,
-            currentGrid: currentPlayer.currentGrid,
-            turn: currentPlayer.turn,
-            isWinner: winner !== null,
-        });
+        try {
+            const { currentPlayer, winner } = await game()(id, token);
+            this.setState({
+                isLoading: false,
+                id,
+                token,
+                currentGrid: currentPlayer.currentGrid,
+                turn: currentPlayer.turn,
+                isWinner: winner !== null,
+            });
+        } catch (error) {
+            ToastAndroid.showWithGravity(
+                'A server error occured, please retry later.',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+            );
+        }
     };
 
     requestMove = async tile => {
-        const { id, token } = this.state;
-        const { currentPlayer, winner } = await move()(id, token, tile);
-        this.setState({
-            currentGrid: currentPlayer.currentGrid,
-            turn: currentPlayer.turn,
-            isWinner: winner !== null,
-        });
+        try {
+            const { id, token } = this.state;
+            const { currentPlayer, winner } = await move()(id, token, tile);
+            this.setState({
+                currentGrid: currentPlayer.currentGrid,
+                turn: currentPlayer.turn,
+                isWinner: winner !== null,
+            });
+        } catch (error) {
+            ToastAndroid.showWithGravity(
+                'A server error occured, please retry later.',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+            );
+        }
     };
 
     requestCancel = async () => {
-        const { id, token } = this.state;
-        this.setState({
-            isLoading: true,
-        });
-        await cancel()(id, token);
-        const { navigation } = this.props;
-        navigation.goBack();
-        ToastAndroid.showWithGravity(
-            'The game has been canceled with success',
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM,
-        );
+        try {
+            const { id, token } = this.state;
+            this.setState({
+                isLoading: true,
+            });
+            await cancel()(id, token);
+            const { navigation } = this.props;
+            navigation.goBack();
+            ToastAndroid.showWithGravity(
+                'The game has been canceled with success',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+            );
+        } catch (error) {
+            ToastAndroid.showWithGravity(
+                'A server error occured, please retry later.',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+            );
+        }
     };
 
     componentWillMount() {

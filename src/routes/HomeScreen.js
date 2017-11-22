@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, Text, StyleSheet, View } from 'react-primitives';
-import { Button } from 'react-native';
+import { Button, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { newGame } from '../services/GameService';
@@ -14,16 +14,24 @@ export default class HomeScreen extends Component {
         navigation: PropTypes.object.isRequired,
     };
 
-    requestNewGame = async mode => {
-        const game = await newGame()(mode);
-        const { navigation } = this.props;
-        navigation.navigate('Game', {
-            game,
-        });
+    requestNewSingleGame = () => {
+        this.requestNewGameAsync('single');
     };
 
-    requestNewSingleGame = () => {
-        this.requestNewGame('single');
+    requestNewGameAsync = async mode => {
+        try {
+            const game = await newGame()(mode);
+            const { navigation } = this.props;
+            navigation.navigate('Game', {
+                game,
+            });
+        } catch (error) {
+            ToastAndroid.showWithGravity(
+                'A server error occured, please retry later.',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+            );
+        }
     };
 
     render() {
