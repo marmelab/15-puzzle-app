@@ -25,7 +25,12 @@ export default class Grid extends Component {
                         <View style={styles.row} key={rowKey}>
                             {row.map(tileValue => {
                                 if (tileValue === 0) {
-                                    return;
+                                    return (
+                                        <View
+                                            key={tileValue}
+                                            style={styles.empty}
+                                        />
+                                    );
                                 }
                                 return (
                                     <Tile
@@ -48,8 +53,12 @@ const styles = StyleSheet.create({
     column: {
         flexDirection: 'column',
     },
+    empty: {
+        height: 50,
+        margin: 2,
+        width: 50,
+    },
     row: {
         flexDirection: 'row',
-        margin: 3,
     },
 });

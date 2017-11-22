@@ -25,7 +25,7 @@ export const game = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
     const url = `${baseUrl}/game/${id}`;
     const method = 'GET';
     const headers = Object.assign({}, DEFAULT_HEADER_JSON, {
-        Authorization: `Bearer  ${token}`,
+        Authorization: `Bearer ${token}`,
     });
 
     return fetch(url, {
@@ -38,7 +38,7 @@ export const move = (baseUrl = DEFAULT_BASE_URL) => (id, token, tile) => {
     const url = `${baseUrl}/game/${id}/move/${tile}`;
     const method = 'PUT';
     const headers = Object.assign({}, DEFAULT_HEADER_JSON, {
-        Authorization: `Bearer  ${token}`,
+        Authorization: `Bearer ${token}`,
     });
 
     return fetch(url, {
