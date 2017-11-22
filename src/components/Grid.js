@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     empty: {
         height: 60,
-        margin: 2,
+        margin: 4,
         width: 60,
     },
     row: {
