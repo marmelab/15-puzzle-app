@@ -96,12 +96,14 @@ export default class GameScreen extends Component {
 
         if (isLoading) {
             return (
-                <View style={styles.container}>
-                    <ActivityIndicator
-                        animating={isLoading}
-                        style={styles.loader}
-                        size="large"
-                    />
+                <View style={styles.page}>
+                    <View style={styles.container}>
+                        <ActivityIndicator
+                            animating={isLoading}
+                            style={styles.loader}
+                            size="large"
+                        />
+                    </View>
                 </View>
             );
         }

@@ -15,10 +15,10 @@ export default class HomeScreen extends Component {
     };
 
     requestNewSingleGame = () => {
-        this.requestNewGameAsync('single');
+        this.requestNewGame('single');
     };
 
-    requestNewGameAsync = async mode => {
+    requestNewGame = async mode => {
         try {
             const game = await newGame()(mode);
             const { navigation } = this.props;
@@ -32,6 +32,11 @@ export default class HomeScreen extends Component {
                 ToastAndroid.BOTTOM,
             );
         }
+    };
+
+    openGames = () => {
+        const { navigation } = this.props;
+        navigation.navigate('Games');
     };
 
     render() {
@@ -48,8 +53,14 @@ export default class HomeScreen extends Component {
                     </View>
                     <View style={styles.actions}>
                         <Button
+                            style={styles.button}
                             onPress={this.requestNewSingleGame}
-                            title="Start a new game"
+                            title="Singleplayer"
+                        />
+                        <Button
+                            style={styles.button}
+                            onPress={this.openGames}
+                            title="Multiplayer"
                         />
                     </View>
                 </View>
@@ -63,13 +74,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'row',
-        width: '100%',
+        flexWrap: 'wrap',
         justifyContent: 'space-between',
         margin: 10,
+        width: '100%',
     },
     banner: {
         height: 200,
         width: '100%',
+    },
+    button: {
+        display: 'flex',
+        padding: 100,
     },
     bloc: {
         backgroundColor: '#E3F2FD',
