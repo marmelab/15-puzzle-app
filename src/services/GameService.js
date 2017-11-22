@@ -7,6 +7,13 @@ const DEFAULT_HEADER_JSON = {
 
 const DEFAULT_BASE_URL = config.apiUrl;
 
+function handleErrors(res) {
+    if (!res.ok) {
+        return Promise.reject(res.statusText);
+    }
+    return res;
+}
+
 export const newGame = (baseUrl = DEFAULT_BASE_URL) => (mode = 'multi') => {
     const url = `${baseUrl}/game`;
     const method = 'POST';
@@ -18,7 +25,9 @@ export const newGame = (baseUrl = DEFAULT_BASE_URL) => (mode = 'multi') => {
         body: JSON.stringify({
             mode,
         }),
-    }).then(res => res.json());
+    })
+        .then(handleErrors)
+        .then(res => res.json());
 };
 
 export const game = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
@@ -31,7 +40,9 @@ export const game = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
     return fetch(url, {
         method,
         headers,
-    }).then(res => res.json());
+    })
+        .then(handleErrors)
+        .then(res => res.json());
 };
 
 export const move = (baseUrl = DEFAULT_BASE_URL) => (id, token, tile) => {
@@ -44,7 +55,9 @@ export const move = (baseUrl = DEFAULT_BASE_URL) => (id, token, tile) => {
     return fetch(url, {
         method,
         headers,
-    }).then(res => res.json());
+    })
+        .then(handleErrors)
+        .then(res => res.json());
 };
 
 export const cancel = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
@@ -57,5 +70,7 @@ export const cancel = (baseUrl = DEFAULT_BASE_URL) => (id, token) => {
     return fetch(url, {
         method,
         headers,
-    }).then(res => res.json());
+    })
+        .then(handleErrors)
+        .then(res => res.json());
 };
