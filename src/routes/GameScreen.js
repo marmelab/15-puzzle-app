@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-primitives';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Button, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { game, move } from '../services/GameService';
+import { game, move, cancel } from '../services/GameService';
 import Grid from '../components/Grid';
 
 export default class GameScreen extends Component {
@@ -46,6 +46,21 @@ export default class GameScreen extends Component {
         });
     };
 
+    requestCancel = async () => {
+        const { id, token } = this.state;
+        this.setState({
+            isLoading: true,
+        });
+        await cancel()(id, token);
+        const { navigation } = this.props;
+        navigation.goBack();
+        ToastAndroid.showWithGravity(
+            'The game has been canceled with success',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+        );
+    };
+
     componentWillMount() {
         let id = this.props.navigation.state.params.game.id;
         let token = this.props.navigation.state.params.game.token;
@@ -67,29 +82,57 @@ export default class GameScreen extends Component {
             );
         }
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>
-                    {isWinner
-                        ? `Turn ${turn}`
-                        : `Congratulations, you have solved the puzzle in ${
-                              turn
-                          } turns!`}
-                </Text>
-                <Grid
-                    onPress={this.requestMove}
-                    grid={currentGrid}
-                    readOnly={isWinner}
-                />
+            <View style={styles.page}>
+                <View style={styles.container}>
+                    <View style={styles.bloc}>
+                        <Text style={styles.title}>
+                            {!isWinner
+                                ? `Turn ${turn}`
+                                : `Congratulations, you have solved the puzzle in ${
+                                      turn
+                                  } turns!`}
+                        </Text>
+                        <Grid
+                            onPress={this.requestMove}
+                            grid={currentGrid}
+                            readOnly={isWinner}
+                        />
+                    </View>
+                    {!isWinner && (
+                        <View style={styles.actions}>
+                            <Button
+                                style={styles.cancel}
+                                color={'red'}
+                                onPress={this.requestCancel}
+                                title="Cancel the game"
+                            />
+                        </View>
+                    )}
+                </View>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#F5FCFF',
+    actions: {
         alignItems: 'center',
-        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        margin: 10,
+    },
+    bloc: {
+        backgroundColor: '#E3F2FD',
+        borderRadius: 2,
+        elevation: 3,
+        margin: 10,
+        width: '100%',
+    },
+    container: {
+        alignItems: 'center',
+        width: '90%',
         justifyContent: 'flex-start',
     },
     loader: {
@@ -98,9 +141,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 8,
     },
+    page: {
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+        flex: 1,
+        height: '100%',
+        justifyContent: 'flex-start',
+        width: '100%',
+    },
     title: {
+        alignSelf: 'flex-start',
         fontSize: 20,
-        textAlign: 'center',
         margin: 10,
     },
 });

@@ -51,12 +51,16 @@ export default class Grid extends Component {
 
 const styles = StyleSheet.create({
     column: {
+        alignItems: 'center',
+        display: 'flex',
         flexDirection: 'column',
+        padding: 10,
+        width: '100%',
     },
     empty: {
-        height: 50,
-        margin: 2,
-        width: 50,
+        height: 60,
+        margin: 4,
+        width: 60,
     },
     row: {
         flexDirection: 'row',

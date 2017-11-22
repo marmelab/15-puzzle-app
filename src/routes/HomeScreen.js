@@ -30,16 +30,21 @@ export default class HomeScreen extends Component {
         const bannerImg = require('../ressources/images/banner.jpg');
 
         return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    Welcome to the 15 puzzle app!
-                </Text>
-                <Image source={bannerImg} style={styles.banner} />
-                <Button
-                    style={styles.actions}
-                    onPress={this.requestNewSingleGame}
-                    title="Start a new game"
-                />
+            <View style={styles.page}>
+                <View style={styles.container}>
+                    <View style={styles.bloc}>
+                        <Text style={styles.welcome}>
+                            Welcome to the 15 puzzle app!
+                        </Text>
+                        <Image source={bannerImg} style={styles.banner} />
+                    </View>
+                    <View style={styles.actions}>
+                        <Button
+                            onPress={this.requestNewSingleGame}
+                            title="Start a new game"
+                        />
+                    </View>
+                </View>
             </View>
         );
     }
@@ -47,17 +52,37 @@ export default class HomeScreen extends Component {
 
 const styles = StyleSheet.create({
     actions: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
         margin: 10,
     },
     banner: {
         height: 200,
-        width: 200,
+        width: '100%',
+    },
+    bloc: {
+        backgroundColor: '#E3F2FD',
+        borderRadius: 2,
+        elevation: 3,
+        margin: 10,
+        padding: 10,
+        width: '100%',
     },
     container: {
-        flex: 1,
+        alignItems: 'center',
+        width: '90%',
         justifyContent: 'flex-start',
+    },
+    page: {
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+        flex: 1,
+        height: '100%',
+        justifyContent: 'flex-start',
+        width: '100%',
     },
     welcome: {
         fontSize: 20,

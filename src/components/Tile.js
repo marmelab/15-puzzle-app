@@ -22,11 +22,11 @@ export default class Tile extends Component {
     };
 
     render() {
-        const { tileValue } = this.props;
+        const { enabled, tileValue } = this.props;
 
         return (
             <TouchableHighlight
-                style={styles.tile}
+                style={[styles.tile, enabled ? styles.enabled : '']}
                 onPress={this.move}
                 underlayColor="#f44336"
             >
@@ -41,10 +41,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#d32f2f',
         display: 'flex',
-        height: 50,
+        height: 60,
         justifyContent: 'center',
-        margin: 2,
-        width: 50,
+        margin: 4,
+        width: 60,
+    },
+    enabled: {
+        elevation: 3,
     },
     value: {
         color: 'white',
