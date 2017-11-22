@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     },
     bloc: {
         backgroundColor: '#E3F2FD',
+        borderRadius: 2,
         elevation: 3,
         margin: 10,
         width: '100%',
