@@ -26,7 +26,6 @@ export default class GameScreen extends Component {
 
     requestGame = async (id, token) => {
         const { currentPlayer, winner } = await game()(id, token);
-
         this.setState({
             isLoading: false,
             id,
@@ -38,10 +37,8 @@ export default class GameScreen extends Component {
     };
 
     requestMove = async tile => {
-        const { id } = this.state.game;
-        const { token } = this.state;
+        const { id, token } = this.state;
         const { currentPlayer, winner } = await move()(id, token, tile);
-
         this.setState({
             currentGrid: currentPlayer.currentGrid,
             turn: currentPlayer.turn,
