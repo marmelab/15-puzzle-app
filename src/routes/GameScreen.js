@@ -21,7 +21,7 @@ export default class GameScreen extends Component {
         token: '',
         currentGrid: null,
         turn: -1,
-        isWinner: false,
+        winnerToken: '',
     };
 
     requestGame = async (id, token) => {
@@ -33,7 +33,7 @@ export default class GameScreen extends Component {
                 token,
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
-                isWinner: winner !== null,
+                winnerToken: winner !== null ? winner.token : '',
             });
         } catch (error) {
             ToastAndroid.showWithGravity(
@@ -51,7 +51,7 @@ export default class GameScreen extends Component {
             this.setState({
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
-                isWinner: winner !== null,
+                winnerToken: winner ? winner.token : '',
             });
         } catch (error) {
             ToastAndroid.showWithGravity(
@@ -91,8 +91,22 @@ export default class GameScreen extends Component {
         this.requestGame(id, token);
     }
 
+    renderWinnerMessage(isWinner, isVictory, turn) {
+        if (!isWinner) {
+            return `Turn ${turn}`;
+        } else if (isVictory) {
+            return `Congratulations, you have solved the puzzle in ${
+                turn
+            } turns!`;
+        }
+        return `Sorry, you opponent solved the puzzle in ${turn} turns!`;
+    }
+
     render() {
-        const { currentGrid, turn, isWinner, isLoading } = this.state;
+        const { token, currentGrid, turn, winnerToken, isLoading } = this.state;
+
+        const isWinner = winnerToken !== '';
+        const isVictory = isWinner && winnerToken === token;
 
         if (isLoading) {
             return (
@@ -112,11 +126,11 @@ export default class GameScreen extends Component {
                 <View style={styles.container}>
                     <View style={styles.bloc}>
                         <Text style={styles.title}>
-                            {!isWinner
-                                ? `Turn ${turn}`
-                                : `Congratulations, you have solved the puzzle in ${
-                                      turn
-                                  } turns!`}
+                            {this.renderWinnerMessage(
+                                isWinner,
+                                isVictory,
+                                turn,
+                            )}
                         </Text>
                         <Grid
                             onPress={this.requestMove}
