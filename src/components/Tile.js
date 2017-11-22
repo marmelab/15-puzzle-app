@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#d32f2f',
         display: 'flex',
-        height: 50,
+        height: 60,
         justifyContent: 'center',
         margin: 2,
-        width: 50,
+        width: 60,
     },
     value: {
         color: 'white',
