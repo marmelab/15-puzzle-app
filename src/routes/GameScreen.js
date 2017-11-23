@@ -3,13 +3,19 @@ import { StyleSheet, Text, View } from 'react-primitives';
 import { ActivityIndicator, Button, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 
+import config from '../config';
 import { game, move, cancel } from '../services/GameService';
 import Grid from '../components/Grid';
 
 export default class GameScreen extends Component {
-    static navigationOptions = ({ navigation }) => ({
-        title: `Game #${navigation.state.params.game.id}`,
-    });
+    static navigationOptions = ({ navigation }) => {
+        const gameId = navigation.state.params.game.id;
+        let title = `Single Game`;
+        if (gameId) {
+            title += ` #${gameId}`;
+        }
+        return { title };
+    };
 
     static propTypes = {
         navigation: PropTypes.object.isRequired,
@@ -18,29 +24,63 @@ export default class GameScreen extends Component {
     state = {
         isLoading: true,
         id: -1,
+        otherPlayerId: -1,
+        isMultiplayer: false,
         token: '',
         currentGrid: null,
         turn: -1,
-        isWinner: false,
+        winnerId: -1,
+    };
+
+    waitForOtherPlayer = async (id, token) => {
+        const { otherPlayer } = await game()(id, token);
+        if (otherPlayer) {
+            return Promise.resolve(otherPlayer);
+        }
+
+        await new Promise(resolve => {
+            setTimeout(resolve, config.refreshDuration);
+        });
+
+        return this.waitForOtherPlayer(id, token);
     };
 
     requestGame = async (id, token) => {
         try {
-            const { currentPlayer, winner } = await game()(id, token);
-            this.setState({
+            let {
+                isMultiplayer,
+                currentPlayer,
+                otherPlayer,
+                winner,
+            } = await game()(id, token);
+
+            if (isMultiplayer && !otherPlayer) {
+                otherPlayer = await this.waitForOtherPlayer(id, token);
+            }
+
+            let newState = {
                 isLoading: false,
                 id,
                 token,
+                playerId: currentPlayer.id,
+                isMultiplayer,
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
-                isWinner: winner !== null,
-            });
+                winnerId: winner !== null ? winner.id : -1,
+            };
+
+            if (isMultiplayer && otherPlayer) {
+                newState.otherPlayerId = otherPlayer.id;
+            }
+            this.setState(newState);
         } catch (error) {
             ToastAndroid.showWithGravity(
                 'A server error occured, please retry later.',
                 ToastAndroid.LONG,
                 ToastAndroid.BOTTOM,
             );
+            const { navigation } = this.props;
+            navigation.goBack();
         }
     };
 
@@ -51,7 +91,7 @@ export default class GameScreen extends Component {
             this.setState({
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
-                isWinner: winner !== null,
+                winnerId: winner !== null ? winner.id : -1,
             });
         } catch (error) {
             ToastAndroid.showWithGravity(
@@ -86,13 +126,28 @@ export default class GameScreen extends Component {
     };
 
     componentWillMount() {
-        let id = this.props.navigation.state.params.game.id;
-        let token = this.props.navigation.state.params.game.token;
+        const id = this.props.navigation.state.params.game.id;
+        const token = this.props.navigation.state.params.game.token;
         this.requestGame(id, token);
     }
 
+    renderWinnerMessage(isWinner, isVictory, turn) {
+        if (isWinner) {
+            if (isVictory) {
+                return `Congratulations, you have solved the puzzle in ${
+                    turn
+                } turns!`;
+            }
+            return `Sorry, you opponent solved the puzzle in ${turn} turns!`;
+        }
+        return `Turn ${turn}`;
+    }
+
     render() {
-        const { currentGrid, turn, isWinner, isLoading } = this.state;
+        const { playerId, winnerId, currentGrid, turn, isLoading } = this.state;
+
+        const isWinner = winnerId !== -1;
+        const isVictory = isWinner && winnerId === playerId;
 
         if (isLoading) {
             return (
@@ -112,11 +167,11 @@ export default class GameScreen extends Component {
                 <View style={styles.container}>
                     <View style={styles.bloc}>
                         <Text style={styles.title}>
-                            {!isWinner
-                                ? `Turn ${turn}`
-                                : `Congratulations, you have solved the puzzle in ${
-                                      turn
-                                  } turns!`}
+                            {this.renderWinnerMessage(
+                                isWinner,
+                                isVictory,
+                                turn,
+                            )}
                         </Text>
                         <Grid
                             onPress={this.requestMove}

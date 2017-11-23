@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-primitives';
-import { Button, FlatList, TouchableHighlight } from 'react-native';
+import { Button, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class ListGames extends Component {
@@ -15,20 +15,14 @@ export default class ListGames extends Component {
         const { onGameSelected } = this.props;
 
         return (
-            <TouchableHighlight
-                key={item.id}
-                title={item.id}
-                style={styles.itemContainer}
-            >
-                <View style={styles.item}>
-                    <Text style={styles.value}>{`Game #${item.id}`}</Text>
-                    <Button
-                        style={styles.join}
-                        title="Join this game"
-                        onPress={onGameSelected}
-                    />
-                </View>
-            </TouchableHighlight>
+            <View style={styles.item} key={item.id}>
+                <Text style={styles.value}>{`Game #${item.id}`}</Text>
+                <Button
+                    style={styles.join}
+                    title="Join this game"
+                    onPress={() => onGameSelected(item.id)}
+                />
+            </View>
         );
     };
 
@@ -44,11 +38,9 @@ export default class ListGames extends Component {
 }
 
 const styles = StyleSheet.create({
-    itemContainer: {
+    item: {
         height: 50,
         width: '100%',
-    },
-    item: {
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'row',

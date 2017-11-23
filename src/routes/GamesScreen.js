@@ -4,7 +4,7 @@ import { ActivityIndicator, Button, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 
 import ListGames from '../components/ListGames';
-import { games } from '../services/GameService';
+import { newGame, games, join } from '../services/GameService';
 
 export default class GamesScreen extends Component {
     static navigationOptions = {
@@ -36,9 +36,49 @@ export default class GamesScreen extends Component {
         }
     };
 
-    requestNewMultiGame = () => {};
+    requestNewMultiGame = () => {
+        this.requestNewGame('multi');
+    };
 
-    requestJoinGame = () => {};
+    requestNewGame = async mode => {
+        try {
+            const game = await newGame()(mode);
+            const { navigation } = this.props;
+            navigation.navigate('Game', {
+                game,
+            });
+        } catch (error) {
+            ToastAndroid.showWithGravity(
+                'A server error occured, please retry later.',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+            );
+        }
+    };
+
+    requestJoinGame = async id => {
+        this.setState({
+            isLoading: true,
+        });
+
+        try {
+            const game = await join()(id);
+            const { navigation } = this.props;
+            navigation.navigate('Game', {
+                game,
+            });
+        } catch (error) {
+            ToastAndroid.showWithGravity(
+                'A server error occured, please retry later.',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+            );
+        }
+
+        this.setState({
+            isLoading: false,
+        });
+    };
 
     componentWillMount() {
         this.requestGames();
