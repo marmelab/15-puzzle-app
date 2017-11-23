@@ -7,9 +7,14 @@ import { game, move, cancel } from '../services/GameService';
 import Grid from '../components/Grid';
 
 export default class GameScreen extends Component {
-    static navigationOptions = ({ navigation }) => ({
-        title: `Game #${navigation.state.params.game.id}`,
-    });
+    static navigationOptions = ({ navigation }) => {
+        const gameId = navigation.state.params.game.id;
+        let title = `Single Game`;
+        if (gameId) {
+            title += ` #${gameId}`;
+        }
+        return { title };
+    };
 
     static propTypes = {
         navigation: PropTypes.object.isRequired,
@@ -41,6 +46,8 @@ export default class GameScreen extends Component {
                 ToastAndroid.LONG,
                 ToastAndroid.BOTTOM,
             );
+            const { navigation } = this.props;
+            navigation.goBack();
         }
     };
 
