@@ -26,7 +26,7 @@ export default class GameScreen extends Component {
         token: '',
         currentGrid: null,
         turn: -1,
-        winnerToken: '',
+        winnerId: '',
     };
 
     requestGame = async (id, token) => {
@@ -38,7 +38,7 @@ export default class GameScreen extends Component {
                 token,
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
-                winnerToken: winner !== null ? winner.token : '',
+                winnerId: winner !== null ? winner.id : -1,
             });
         } catch (error) {
             ToastAndroid.showWithGravity(
@@ -58,7 +58,7 @@ export default class GameScreen extends Component {
             this.setState({
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
-                winnerToken: winner ? winner.token : '',
+                winnerId: winner ? winner.id : '',
             });
         } catch (error) {
             ToastAndroid.showWithGravity(
@@ -110,10 +110,10 @@ export default class GameScreen extends Component {
     }
 
     render() {
-        const { token, currentGrid, turn, winnerToken, isLoading } = this.state;
+        const { id, currentGrid, turn, winnerId, isLoading } = this.state;
 
-        const isWinner = winnerToken !== '';
-        const isVictory = isWinner && winnerToken === token;
+        const isWinner = winnerId !== -1;
+        const isVictory = isWinner && winnerId === id;
 
         if (isLoading) {
             return (
