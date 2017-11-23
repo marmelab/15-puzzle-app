@@ -62,6 +62,7 @@ export default class GameScreen extends Component {
                 isLoading: false,
                 id,
                 token,
+                playerId: currentPlayer.id,
                 isMultiplayer,
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
@@ -143,10 +144,10 @@ export default class GameScreen extends Component {
     }
 
     render() {
-        const { id, currentGrid, turn, winnerId, isLoading } = this.state;
+        const { playerId, winnerId, currentGrid, turn, isLoading } = this.state;
 
         const isWinner = winnerId !== -1;
-        const isVictory = isWinner && winnerId === id;
+        const isVictory = isWinner && winnerId === playerId;
 
         if (isLoading) {
             return (
