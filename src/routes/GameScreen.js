@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-primitives';
 import { ActivityIndicator, Button, ToastAndroid } from 'react-native';
-import { setTimeout } from 'react-timer-mixin';
 import PropTypes from 'prop-types';
 
 import config from '../config';
@@ -33,6 +32,19 @@ export default class GameScreen extends Component {
         winnerId: -1,
     };
 
+    waitForOtherPlayer = async (id, token) => {
+        const { otherPlayer } = await game()(id, token);
+        if (otherPlayer) {
+            return Promise.resolve(otherPlayer);
+        }
+
+        await new Promise(resolve => {
+            setTimeout(() => resolve(), config.refreshDuration);
+        });
+
+        return this.waitForOtherPlayer(id, token);
+    };
+
     requestGame = async (id, token) => {
         try {
             let {
@@ -41,6 +53,10 @@ export default class GameScreen extends Component {
                 otherPlayer,
                 winner,
             } = await game()(id, token);
+
+            if (isMultiplayer && !otherPlayer) {
+                otherPlayer = await this.waitForOtherPlayer(id, token);
+            }
 
             let newState = {
                 isLoading: false,
