@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-primitives';
 import { ActivityIndicator, Button, ToastAndroid } from 'react-native';
+import { setTimeout } from 'react-timer-mixin';
 import PropTypes from 'prop-types';
 
+import config from '../config';
 import { game, move, cancel } from '../services/GameService';
 import Grid from '../components/Grid';
 
@@ -23,23 +25,37 @@ export default class GameScreen extends Component {
     state = {
         isLoading: true,
         id: -1,
+        otherPlayerId: -1,
+        isMultiplayer: false,
         token: '',
         currentGrid: null,
         turn: -1,
-        winnerId: '',
+        winnerId: -1,
     };
 
     requestGame = async (id, token) => {
         try {
-            const { currentPlayer, winner } = await game()(id, token);
-            this.setState({
+            let {
+                isMultiplayer,
+                currentPlayer,
+                otherPlayer,
+                winner,
+            } = await game()(id, token);
+
+            let newState = {
                 isLoading: false,
                 id,
                 token,
+                isMultiplayer,
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
                 winnerId: winner !== null ? winner.id : -1,
-            });
+            };
+
+            if (isMultiplayer && otherPlayer) {
+                newState.otherPlayerId = otherPlayer.id;
+            }
+            this.setState(newState);
         } catch (error) {
             ToastAndroid.showWithGravity(
                 'A server error occured, please retry later.',
@@ -58,7 +74,7 @@ export default class GameScreen extends Component {
             this.setState({
                 currentGrid: currentPlayer.currentGrid,
                 turn: currentPlayer.turn,
-                winnerId: winner ? winner.id : '',
+                winnerId: winner !== null ? winner.id : -1,
             });
         } catch (error) {
             ToastAndroid.showWithGravity(
@@ -93,20 +109,21 @@ export default class GameScreen extends Component {
     };
 
     componentWillMount() {
-        let id = this.props.navigation.state.params.game.id;
-        let token = this.props.navigation.state.params.game.token;
+        const id = this.props.navigation.state.params.game.id;
+        const token = this.props.navigation.state.params.game.token;
         this.requestGame(id, token);
     }
 
     renderWinnerMessage(isWinner, isVictory, turn) {
-        if (!isWinner) {
-            return `Turn ${turn}`;
-        } else if (isVictory) {
-            return `Congratulations, you have solved the puzzle in ${
-                turn
-            } turns!`;
+        if (isWinner) {
+            if (isVictory) {
+                return `Congratulations, you have solved the puzzle in ${
+                    turn
+                } turns!`;
+            }
+            return `Sorry, you opponent solved the puzzle in ${turn} turns!`;
         }
-        return `Sorry, you opponent solved the puzzle in ${turn} turns!`;
+        return `Turn ${turn}`;
     }
 
     render() {
