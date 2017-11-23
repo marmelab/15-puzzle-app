@@ -39,7 +39,7 @@ export default class GameScreen extends Component {
         }
 
         await new Promise(resolve => {
-            setTimeout(() => resolve(), config.refreshDuration);
+            setTimeout(resolve, config.refreshDuration);
         });
 
         return this.waitForOtherPlayer(id, token);
