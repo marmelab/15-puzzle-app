@@ -1,14 +1,14 @@
 # 15-puzzle-app
 
-A react native app to play the 15 puzzle game.
+An app to play the 15 puzzle game, in react native.
+
+> See the [related article](https://marmelab.com/blog/2018/02/07/jeu-du-taquin-en-react.html) on the Marmelab blog
 
 ## Requirements
 
-Make sure to have `npm` and `android` installed.
+Make sure to have `nodejs`, `npm` and `android` installed.
 
-## Contributing
-
-### Help
+## Help
 
 Print all available commands
 
@@ -16,27 +16,17 @@ Print all available commands
 make
 ```
 
-### Test
+## Build
 
-Launch the unit and integration tests
+Build the docker
 
-``` bash
-make test
+```bash
+make install
 ```
 
-### Linter
+## Run the game
 
-Launch eslint
-
-``` bash
-make lint
-```
-
-## Run the project
-
-Note: make sure to have a connected device before running the project.
-
-### Start the app
+_Note: make sure to have a connected device before running the project._
 
 Run the 15-puzzle game on android
 
@@ -48,4 +38,22 @@ You can use the `start` alias aswell.
 
 ``` bash
 make start
+```
+
+## Contributing
+
+### Test
+
+Launch the unit and integration tests
+
+``` bash
+make test
+```
+
+### Linter
+
+Launch the eslint linter
+
+``` bash
+make lint
 ```
