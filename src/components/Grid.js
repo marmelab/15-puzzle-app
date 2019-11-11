@@ -20,30 +20,26 @@ export default class Grid extends Component {
 
         return (
             <View style={styles.column}>
-                {grid.map((row, rowKey) => {
-                    return (
-                        <View style={styles.row} key={rowKey}>
-                            {row.map(tileValue => {
-                                if (tileValue === 0) {
-                                    return (
-                                        <View
-                                            key={tileValue}
-                                            style={styles.empty}
-                                        />
-                                    );
-                                }
-                                return (
+                {grid.map((row, rowKey) => (
+                    <View style={styles.row} key={rowKey}>
+                        {row.map(
+                            tileValue =>
+                                tileValue === 0 ? (
+                                    <View
+                                        key={tileValue}
+                                        style={styles.empty}
+                                    />
+                                ) : (
                                     <Tile
                                         key={tileValue}
                                         tileValue={tileValue}
                                         enabled={!readOnly}
                                         onPress={onPress}
                                     />
-                                );
-                            })}
-                        </View>
-                    );
-                })}
+                                ),
+                        )}
+                    </View>
+                ))}
             </View>
         );
     }

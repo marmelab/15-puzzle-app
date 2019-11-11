@@ -8,3 +8,11 @@ import renderer from 'react-test-renderer';
 it('should render Grid correctly', () => {
     renderer.create(<Grid onPress={() => {}} grid={[]} />);
 });
+
+it('should match snapshot', () => {
+    const grid = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]];
+    const tree = renderer
+        .create(<Grid onPress={() => {}} grid={grid} />)
+        .toJSON();
+    expect(tree).toMatchSnapshot();
+});
